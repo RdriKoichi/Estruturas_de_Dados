@@ -1,0 +1,93 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+//imcompleto
+
+typedef struct  {
+    int chave;
+} objeto;
+
+typedef struct NoLista *PtrNoLista;
+
+typedef struct NoLista {
+    objeto elemento;
+    PtrNoLista proximo;
+} NoLista;
+
+typedef struct {
+    PtrNoLista primeiro;
+    int tamanho;
+} Lista;
+
+
+void iniciaLista(Lista *list){
+    list->primeiro = NULL;
+    list->tamanho = 0;
+}
+
+bool estaVazia(Lista *list){
+    return(list->tamanho == 0);
+}
+
+void inserir(Lista *list, objeto x){
+    PtrNoLista new;
+    new = (PtrNoLista) malloc(sizeof(NoLista));
+    new -> elemento = x;
+
+    if(estaVazia(list)||(x.chave < list->primeiro->elemento.chave)){
+        new -> proximo = list -> primeiro;
+        list -> primeiro = new;
+    }else {
+        PtrNoLista aux;
+        aux = list->primeiro;
+
+        while (aux->proximo != NULL && x.chave > aux -> proximo -> elemento.chave) {
+            aux = aux -> proximo;
+        }
+        new -> proximo = aux -> proximo;
+        aux -> proximo = new;
+    }
+    list -> tamanho++;
+}
+
+bool pesquisar(Lista *list, int key){
+    if(estaVazia(list) == true){
+        return false;
+    }
+
+    PtrNoLista aux;
+
+    while(aux != NULL && key > aux -> elemento.chave) {
+        aux = aux->proximo;
+    }
+    if (aux == NULL || aux->elemento.chave > key) {
+        return false;
+    }
+    return true;
+}
+
+void removePrimeiro(Lista *list, objeto *item){
+    if(estaVazia(list) == 0){
+        PtrNoLista aux = list -> primeiro;
+    }
+}
+
+void imprimirLista(Lista *list);
+
+void destruirLista(Lista *list);
+
+
+int tamanhoLista(Lista *list){
+    return(list->tamanho);
+}
+void removeElemento(Lista *list, int chave, objeto *item);
+
+void removeUltimo(Lista *list, objeto *item);
+objeto primeiro(Lista *list);
+objeto ultimo(Lista *list);
+
+int main() {
+
+    return(0);
+}
