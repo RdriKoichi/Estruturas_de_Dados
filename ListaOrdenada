@@ -22,12 +22,29 @@ typedef struct {
 
 
 void iniciaLista(Lista *list){
-    list->primeiro = NULL;
-    list->tamanho = 0;
+    list -> primeiro = NULL;
+    list -> tamanho = 0;
 }
 
 bool estaVazia(Lista *list){
-    return(list->tamanho == 0);
+    if(list -> primeiro == NULL) {
+        return true;
+    }else
+        return false;
+}
+
+bool pesquisar(Lista *list, int key){
+    if(estaVazia(list) == true){
+        return false;
+    }
+    PtrNoLista aux;
+    while(aux != NULL && key > aux -> elemento.chave) {
+        aux = aux->proximo;
+    }
+    if (aux == NULL || aux -> elemento.chave > key) {
+        return false;
+    }
+    return true;
 }
 
 void inserir(Lista *list, objeto x){
@@ -35,14 +52,14 @@ void inserir(Lista *list, objeto x){
     new = (PtrNoLista) malloc(sizeof(NoLista));
     new -> elemento = x;
 
-    if(estaVazia(list)||(x.chave < list->primeiro->elemento.chave)){
+    if(estaVazia(list) == true ||(x.chave < list -> primeiro -> elemento.chave)){
         new -> proximo = list -> primeiro;
         list -> primeiro = new;
     }else {
         PtrNoLista aux;
-        aux = list->primeiro;
+        aux = list -> primeiro;
 
-        while (aux->proximo != NULL && x.chave > aux -> proximo -> elemento.chave) {
+        while (aux -> proximo != NULL && x.chave > aux -> proximo -> elemento.chave) {
             aux = aux -> proximo;
         }
         new -> proximo = aux -> proximo;
@@ -51,40 +68,66 @@ void inserir(Lista *list, objeto x){
     list -> tamanho++;
 }
 
-bool pesquisar(Lista *list, int key){
-    if(estaVazia(list) == true){
-        return false;
-    }
-
-    PtrNoLista aux;
-
-    while(aux != NULL && key > aux -> elemento.chave) {
-        aux = aux->proximo;
-    }
-    if (aux == NULL || aux->elemento.chave > key) {
-        return false;
-    }
-    return true;
-}
-
-void removePrimeiro(Lista *list, objeto *item){
-    if(estaVazia(list) == 0){
-        PtrNoLista aux = list -> primeiro;
-    }
-}
-
-void imprimirLista(Lista *list);
-
-void destruirLista(Lista *list);
-
-
 int tamanhoLista(Lista *list){
-    return(list->tamanho);
+    return(list -> tamanho);
 }
-void removeElemento(Lista *list, int chave, objeto *item);
+void removePrimeiro(Lista *list, objeto *item){
+     
+}
 
-void removeUltimo(Lista *list, objeto *item);
-objeto primeiro(Lista *list);
+void removerElemento(Lista *list, objeto *item, int chave){
+
+    if(estaVazia(list) == true || (chave < list -> primeiro -> elemento.chave)){
+        return false;
+    }
+    else {
+        if (chave == list->primeiro->elemento.chave) {
+            printf("removeu!!\n");
+            removePrimeiro(list, item);
+        }
+        else{
+            PtrNoLista aux = list -> primeiro;
+            while((aux -> proximo != NULL) && (chave > aux -> proximo -> elemento.chave)){
+                aux = aux -> proximo;
+            }
+            if((aux -> proximo == NULL) || (chave < aux -> proximo -> elemento.chave)){
+                printf("Nao Existe!!!");
+            }
+            else{
+                PtrNoLista remove = aux -> proximo;
+                aux -> proximo = aux -> proximo -> proximo;
+                list -> tamanho--;
+                free(remove);
+            }
+        }
+    }
+}
+
+void removeUltimo(Lista *list, objeto *item){
+    if(estaVazia(list) == 0){
+        if(tamanhoLista(list) == 1){
+            removePrimeiro(list, item);
+        }
+        else{
+            PtrNoLista  aux;
+            aux = list -> primeiro;
+
+            for (aux = list -> primeiro; aux -> proximo -> proximo != NULL; aux = aux -> proximo);
+            PtrNoLista remove = aux -> proximo;
+            *item = remove -> elemento;
+            aux -> proximo = NULL;
+            free(remove);
+            printf("Elemento removido: %d\n", (*item).chave);
+            list -> tamanho = list -> tamanho-1;
+        }
+    }else{
+        printf("Esta Vazia!!!");
+    }
+}
+objeto primeiro(Lista *list){
+    objeto aux = list -> primeiro -> elemento;
+    return(aux);
+}
 objeto ultimo(Lista *list);
 
 int main() {
